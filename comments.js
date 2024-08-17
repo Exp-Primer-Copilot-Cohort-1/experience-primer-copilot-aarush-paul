@@ -1,36 +1,18 @@
-// Create a web server
-// 1. Create a web server
-// 2. Handle GET requests to /comments
-// 3. Handle POST requests to /comments
-// 4. Handle PUT requests to /comments/:id
-// 5. Handle DELETE requests to /comments/:id
+// Create web server
+// Create a web server that listens on port 3000 and serves the comments.html file. Use the fs module to read the file and send it to the client.
 
-// 1. Create a web server
-const express = require('express');
-const app = express();
-const port = 3000;
+var http = require('http');
+var fs = require('fs');
 
-// 2. Handle GET requests to /comments
-app.get('/comments', (req, res) => {
-    res.send('GET comments');
-});
-
-// 3. Handle POST requests to /comments
-app.post('/comments', (req, res) => {
-    res.send('POST comments');
-});
-
-// 4. Handle PUT requests to /comments/:id
-app.put('/comments/:id', (req, res) => {
-    res.send('PUT comments');
-});
-
-// 5. Handle DELETE requests to /comments/:id
-app.delete('/comments/:id', (req, res) => {
-    res.send('DELETE comments');
-});
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+http.createServer(function(req, res) {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  fs.readFile('./comments.html', function(error, data) {
+    if (error) {
+      res.writeHead(404);
+      res.write('Error: File Not Found');
+    } else {
+      res.write(data);
+    }
+    res.end();
+  });
+}).listen(3000);
